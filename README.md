@@ -1,14 +1,15 @@
-# Proyecto Integrador Programación
+# Clasificador de tópicos de noticias
 
-## Programa de Inteligencia Artificial (PIA): Clasificación de tópicos de noticias (multiclase)
+Aplicación web que clasifica titulares de noticias en español en seis categorías (Deportes, Política, Tecnología, Economía, Cultura y Salud). Un modelo de aprendizaje automático (TF-IDF + regresión logística) se expone mediante una API REST con FastAPI y se consume desde un frontend en React.
 
-### 1. Tema
+Proyecto Integrador Programación – Programa de Inteligencia Artificial (PIA), Universidad Nacional de Hurlingham.
 
-El proyecto consiste en desarrollar un sistema de clasificación automática de tópicos de noticias: dado el titular de una noticia en español, el sistema determina a qué categoría pertenece (Deportes, Política, Tecnología, Economía, Cultura o Salud). Se trata de un problema de clasificación de texto supervisada multiclase, resuelto con un modelo clásico de aprendizaje automático (TF-IDF + regresión logística) y expuesto como una aplicación web interactiva.
+## Cómo funciona
 
-### 2. Contexto organizacional
-
-Este proyecto se enmarca en el Proyecto Integrador Programación del Programa de Inteligencia Artificial (PIA) de la Universidad Nacional de Hurlingham. La actividad busca que el estudiante aplique, de forma integrada, los conocimientos de programación y de aprendizaje automático adquiridos en la carrera, desarrollando un producto funcional completo: desde la construcción de los datos y el entrenamiento del modelo hasta su despliegue como aplicación web. La clasificación de noticias es una aplicación real y comprensible del procesamiento de lenguaje natural, con impacto directo en áreas como la organización de contenidos, los portales de noticias y los sistemas de recomendación.
+1. El usuario ingresa un titular.
+2. El frontend lo envía a `POST /api/classify`.
+3. El backend convierte el texto a vectores TF-IDF y calcula la probabilidad de cada categoría.
+4. Responde con la categoría predicha, su confianza y las probabilidades de las seis categorías.
 
 ## Alcances
 
