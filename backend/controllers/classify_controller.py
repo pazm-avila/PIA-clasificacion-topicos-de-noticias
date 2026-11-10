@@ -10,9 +10,13 @@ def clasificar(entrada: Entrada) -> dict:
     probs = modelo.predict_proba([entrada.titular])[0]
     probabilidades = {c: float(p) for c, p in zip(modelo.classes_, probs)}
     categoria = max(probabilidades, key=probabilidades.get)
+    confianza = probabilidades[categoria]
 
+    if confianza < 0.3:
+        categoria = "Otros"
+    
     return {
         "categoria": categoria,
-        "confianza": probabilidades[categoria],
+        "confianza": confianza,
         "probabilidades": probabilidades,
     }
