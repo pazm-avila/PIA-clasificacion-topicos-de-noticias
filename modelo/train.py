@@ -6,6 +6,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.pipeline import Pipeline
 from sklearn.metrics import classification_report, accuracy_score, confusion_matrix
+from modelo.tokenizador import SubPalabras
 
 RAIZ = Path(__file__).resolve().parent.parent
 df = pd.read_csv(RAIZ / "data" / "dataset.csv")
@@ -17,9 +18,11 @@ X_train, X_test, y_train, y_test = train_test_split(
 )
 
 modelo = Pipeline([
-    ("tfidf", TfidfVectorizer(ngram_range=(1, 2))),
+    ("subpalabras", SubPalabras()),
+    ("tfidf", TfidfVectorizer(token_pattern=r"\S+", lowercase=False, ngram_range=(1, 2))),
     ("clf", LogisticRegression(max_iter=1000, C=10)),
 ])
+
 modelo.fit(X_train, y_train)
 
 y_pred = modelo.predict(X_test)
