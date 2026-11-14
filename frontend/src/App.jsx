@@ -1,122 +1,60 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import './App.css'
+import { useState } from "react";
+import Layout from "./components/layout/Layout";
+import Hero from "./components/Hero";
+import Form from "./components/Form";
+import Card from "./components/Card";
+import Probabilidades from "./components/Probabilidades";
+import Resultado from "./components/Resultado";
+import Razonamiento from "./components/Razonamiento";
+import Explicacion from "./components/Explicacion";
+import { clasificarTitular } from "./services/api";
+import { masProbable } from "./utils/formato";
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function App() {
+  const [titular, setTitular] = useState("");
+  const [res, setRes] = useState(null);
+  const [sel, setSel] = useState("");
+  const [cargando, setCargando] = useState(false);
+  const [error, setError] = useState("");
+
+  async function clasificar(texto) {
+    setCargando(true);
+    setError("");
+    try {
+      const data = await clasificarTitular(texto);
+      setTitular(texto);
+      setRes(data);
+      setSel(masProbable(data.probabilidades));
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setCargando(false);
+    }
+  }
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <Layout>
+      <Hero />
+      <Form onEnviar={clasificar} cargando={cargando} error={error} onError={setError} />
 
-      <div className="ticks"></div>
+      {!res && !error && (
+        <Card className="mt-5 border-dashed p-10 text-center text-sm text-soft">
+          Ingresá un titular para ver la categoría, las probabilidades y la explicación.
+        </Card>
+      )}
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+      {res && (
+        <>
+          <div className="mt-5 grid gap-5 lg:grid-cols-[minmax(0,1fr)_340px]">
+            <Probabilidades res={res} sel={sel} onSeleccionar={setSel} />
+            <div className="space-y-5">
+              <Resultado res={res} />
+              <Razonamiento res={res} sel={sel} titular={titular} />
+            </div>
+          </div>
+          <Explicacion res={res} sel={sel} />
+        </>
+      )}
+    </Layout>
+  );
 }
-
-export default App
