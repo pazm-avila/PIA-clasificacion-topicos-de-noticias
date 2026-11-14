@@ -1,10 +1,6 @@
 import starmoon from "../../assets/starmoon.svg";
+import Icon from "./Icon";
 
-export default function IconLuna({ className = "h-5 w-5" }) {
-  return (
-    <div>
-      <img src={starmoon} alt="Luna icon" className={className} />
-    </div>
-  );
+export default function IconLuna({ className }) {
+  return <Icon src={starmoon} colores className={className} />;
 }
-

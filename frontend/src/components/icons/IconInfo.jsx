@@ -1,9 +1,6 @@
 import info from "../../assets/info.svg";
+import Icon from "./Icon";
 
-export default function IconInfo({ className = "h-5 w-5" }) {
-  return (
-    <div>
-      <img src={info} alt="Info icon" className={className} />
-    </div>
-  );
+export default function IconInfo({ className }) {
+  return <Icon src={info} className={className} />;
 }

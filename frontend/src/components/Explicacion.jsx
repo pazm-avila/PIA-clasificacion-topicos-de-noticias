@@ -85,7 +85,7 @@ export default function Explicacion({ res, sel }) {
       )}
 
       <div className="mt-5 flex gap-2 border-t border-border pt-4 text-xs leading-relaxed text-soft">
-        <IconInfo className="mt-0.5 h-3.5 w-3.5 shrink-0 text-secondary" />
+        <IconInfo className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" />
         <p className="text-pretty">
           El prefijo <strong className="text-foreground">##</strong> indica que el token continúa una
           palabra. El aporte de cada token es su valor TF-IDF multiplicado por su coeficiente en la

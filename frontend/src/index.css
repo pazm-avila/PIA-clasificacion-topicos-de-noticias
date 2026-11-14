@@ -16,6 +16,7 @@
   --glow: none;
   --positive: #5aa123;
   --negative: #e5252a;
+  --footer: #e3e9dc;
 }
 
 .dark {
@@ -33,6 +34,7 @@
   --glow: 0 0 6px #39c5bb, 0 0 18px rgb(57 197 187 / 0.6);
   --positive: #4ade80;
   --negative: #ff4d4d;
+  --footer: #05070c;
 }
 
 @theme inline {
@@ -49,6 +51,7 @@
   --color-winner: var(--winner);
   --color-positive: var(--positive);
   --color-negative: var(--negative);
+  --color-footer: var(--footer);
 }
 
 @layer base {

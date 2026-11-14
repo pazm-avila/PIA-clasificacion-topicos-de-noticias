@@ -1,9 +1,6 @@
-import stats from "../../assets/stats2.svg";
+import stats from "../../assets/stats3.svg";
+import Icon from "./Icon";
 
-export default function IconLogo({ className = "h-5 w-5" }) {
-  return (
-    <div>
-      <img src={stats} alt="Stats icon" className={className} />
-    </div>
-  );
+export default function IconLogo({ className }) {
+  return <Icon src={stats} className={className} />;
 }
