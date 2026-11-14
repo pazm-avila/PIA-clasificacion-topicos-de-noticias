@@ -4,7 +4,14 @@ import numpy as np
 from backend.schemas import Entrada
 
 RAIZ = Path(__file__).resolve().parent.parent.parent
-modelo = joblib.load(RAIZ / "modelo.joblib")
+ruta_modelo = RAIZ / "modelo.joblib"
+
+if not ruta_modelo.exists():
+    raise FileNotFoundError(
+        "Falta modelo.joblib. Ejecutá python -m modelo.train"
+    )
+
+modelo = joblib.load(ruta_modelo)
 
 subpalabras = modelo.named_steps["subpalabras"]
 tfidf = modelo.named_steps["tfidf"]
