@@ -6,7 +6,7 @@ import IconLuna from "../icons/IconLuna";
 export default function Header() {
   const { oscuro, alternar } = useTheme();
   return (
-    <header className="border-b border-border">
+    <header className="border-b border-border sticky top-0 z-50 bg-background">
       <div className="mx-auto flex max-w-[1100px] items-center justify-between gap-4 px-5 py-4">
         <div className="flex items-center gap-3">
           <IconLogo className="h-10 w-10" />
