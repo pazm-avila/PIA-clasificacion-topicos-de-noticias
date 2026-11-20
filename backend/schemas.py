@@ -16,3 +16,18 @@ class Entrada(BaseModel):
         if not LETRAS.search(v):
             raise ValueError("El titular debe incluir texto, no solo números o símbolos.")
         return v
+
+class TokenAporte(BaseModel):
+    token: str
+    aportes: dict[str, float]
+
+class Explicabilidad(BaseModel):
+    tokens: list[TokenAporte]
+    puntaje_inicial: dict[str, float]
+    puntajes: dict[str, float]
+
+class RespuestaClasificar(BaseModel):
+    categoria: str
+    confianza: float
+    probabilidades: dict[str, float]
+    explicabilidad: Explicabilidad
