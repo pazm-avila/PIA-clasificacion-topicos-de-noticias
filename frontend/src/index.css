@@ -58,5 +58,9 @@
   button:not(:disabled),
   [role="button"]:not(:disabled) {
     cursor: pointer;
+  };
+  ::selection {
+    background: var(--primary);
+    color: var(--on-primary);
   }
 }
