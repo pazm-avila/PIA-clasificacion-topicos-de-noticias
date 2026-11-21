@@ -214,3 +214,14 @@ Resultados de la última ejecución de `modelo/train.py`.
 | Tecnología | 0,73 | 0,77 | 0,75 |
 
 **Validación cruzada** (5 cortes estratificados): F1 macro promedio de 0,8241.
+
+
+## Ejecución de pruebas
+
+Desde la carpeta raíz del proyecto, con el entorno virtual activado:
+
+```powershell
+python -m pytest -v
+
+
+`pytest` y `httpx` deben estar instalados. `requirements.txt` ya los incluye.
