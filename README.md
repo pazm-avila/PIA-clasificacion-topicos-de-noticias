@@ -11,7 +11,7 @@ Aplicación web que clasifica titulares de noticias en español en seis categor�
 2. El frontend lo envía al endpoint `POST /api/classify`.
 3. El backend normaliza el texto (sin tildes y en minúsculas), lo divide en subpalabras, lo convierte en vectores TF-IDF y calcula la probabilidad de cada categoría.
 4. La API devuelve la categoría, la confianza, las probabilidades de las seis categorías y el aporte de cada token a la decisión.
-5. Si ninguna categoría supera el 30 % de probabilidad, la respuesta es `Otros` (ver [Categoría Otros](#categoría-otros)).
+5. Si ninguna categoría supera el 50 % de probabilidad, la respuesta es `Otros` (ver [Categoría Otros](#categoría-otros)).
 
 ## Alcances
 
@@ -24,10 +24,7 @@ Aplicación web que clasifica titulares de noticias en español en seis categor�
 ## Limitaciones
 
 - Solo se contemplan seis categorías fijas: `Otros` no es una categoría entrenada.
-- La validación de entrada es mínima (de 3 a 200 caracteres y al menos una letra): un texto sin sentido que contenga letras puede recibir una categoría.
-- El corpus es de tamaño moderado y con un sesgo parcial de fuentes (algunas categorías dependen de pocos medios).
-- No se aplica stemming ni lematización, y la tokenización por subpalabras no captura sinónimos.
-- No hay base de datos: cada consulta es independiente.
+- No se aplica stemming ni lematización.
 - La recolección de nuevos datos mediante feeds RSS requiere conexión a internet.
 
 ## Tecnologías
@@ -73,6 +70,7 @@ PIA/
 │   │   ├── index.css
 │   │   └── main.jsx
 │   ├── index.html
+│   ├── package-lock.json
 │   ├── package.json
 │   └── vite.config.js
 ├── modelo/                  # scripts de datos y entrenamiento
@@ -95,14 +93,15 @@ Desde la carpeta raíz del proyecto, crear y activar el entorno virtual:
 
 ```bash
 python -m venv venv
-venv\Scripts\activate
+.\venv\Scripts\Activate.ps1
 ```
 
 Instalar las dependencias:
 
 ```bash
-pip install -r requirements.txt
+python -m pip install -r requirements.txt
 ```
+Es importante instalar la versión indicada en `requirements.txt`, en especial `scikit-learn==1.9.1`, ya que es la versión que se utilizó para entrenar el modelo; así evitar la advertencia `InconsistentVersionWarning` al cargar `modelo.joblib`.
 
 ### Frontend
 
@@ -184,11 +183,11 @@ El titular debe tener entre 3 y 200 caracteres y al menos una letra; en caso con
 
 ## Categoría Otros
 
-`Otros` no es una categoría entrenada ni tiene probabilidad propia: es una respuesta residual y no aparece en `probabilidades`. Cuando la probabilidad máxima entre las seis categorías es menor a **0,30**, la API devuelve `"categoria": "Otros"`.
+`Otros` no es una categoría entrenada, sino una flag que indica que ninguna de las seis categorías alcanzó el umbral de confianza establecido (**0,50**). Cuando la probabilidad máxima no supera este umbral, la API devuelve `"categoria": "Otros"`. No tiene probabilidad propia ni aparece en `probabilidades`.
 
 ## Dataset
 
-El dataset (`data/dataset.csv`) contiene 1.638 titulares de noticias en español (273 por categoría), recolectados con `modelo/rss.py` y `feedparser` desde feeds RSS de diarios argentinos y feeds por tema de Google Noticias. La sección del feed define la etiqueta. Se eliminan duplicados y se balancean las categorías. Ejecutar `rss.py` (requiere internet) suma las noticias del día y modifica el dataset, por lo que las métricas pueden variar.
+El dataset (`data/dataset.csv`) contiene 6.036 titulares de noticias en español (1.006 por categoría), recolectados mediante feeds RSS de distintos medios y portales de noticias argentinos, además de feeds temáticos de Google Noticias configurados para Argentina. La categoría se asigna según el feed del que se obtiene cada titular. Se eliminan duplicados y se balancean las seis categorías. La ejecución de `rss.py` requiere conexión a internet y puede modificar el dataset, por lo que las métricas de evaluación pueden variar.
 
 ## Resultados de evaluación
 
@@ -198,9 +197,20 @@ Resultados de la última ejecución de `modelo/train.py`.
 
 | Métrica | Resultado |
 |---|---:|
-| Exactitud | 82,58 % |
-| Precisión macro | 0,83 |
-| Recall macro | 0,83 |
-| F1 macro | 0,83 |
+| Exactitud | 81,13 % |
+| Precisión macro | 0,81 |
+| Recall macro | 0,81 |
+| F1 macro | 0,81 |
 
-**Validación cruzada** (5 cortes estratificados): F1 macro promedio de 0,8281.
+**Por categoría:**
+
+| Categoría | Precisión | Recall | F1 |
+|---|---:|---:|---:|
+| Cultura | 0,75 | 0,85 | 0,80 |
+| Deportes | 0,90 | 0,83 | 0,87 |
+| Economía | 0,74 | 0,70 | 0,72 |
+| Política | 0,84 | 0,84 | 0,84 |
+| Salud | 0,92 | 0,88 | 0,90 |
+| Tecnología | 0,73 | 0,77 | 0,75 |
+
+**Validación cruzada** (5 cortes estratificados): F1 macro promedio de 0,8241.

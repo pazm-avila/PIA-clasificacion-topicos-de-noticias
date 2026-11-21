@@ -13,6 +13,7 @@ if not ruta_modelo.exists():
 
 modelo = joblib.load(ruta_modelo)
 
+UMBRAL_OTROS = 0.5
 subpalabras = modelo.named_steps["subpalabras"]
 tfidf = modelo.named_steps["tfidf"]
 clf = modelo.named_steps["clf"]
@@ -65,7 +66,7 @@ def clasificar(entrada: Entrada) -> dict:
 
     mejor = max(probabilidades, key=probabilidades.get)
     confianza = probabilidades[mejor]
-    categoria = mejor if confianza >= 0.3 else "Otros"
+    categoria = mejor if confianza >= UMBRAL_OTROS else "Otros"
 
     return {
         "categoria": categoria,

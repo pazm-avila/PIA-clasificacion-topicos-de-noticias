@@ -3,8 +3,7 @@ import Tag from "./Tag";
 import IconInfo from "./icons/IconInfo";
 import { nombre, num, signado } from "../utils/formato";
 
-const COLS =
-  "grid grid-cols-[6rem_minmax(0,1fr)_3.5rem] items-center gap-4 sm:grid-cols-[8rem_minmax(0,1fr)_3.5rem]";
+const COLS = "grid grid-cols-[6rem_minmax(0,1fr)_3.5rem] items-center gap-4 sm:grid-cols-[8rem_minmax(0,1fr)_3.5rem]";
 const GUIAS = [0, 25, 75, 100];
 
 export default function Explicacion({ res, sel }) {

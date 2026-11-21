@@ -1,4 +1,4 @@
-export const UMBRAL_OTROS = 0.3;
+export const UMBRAL_OTROS = 0.5;
 
 export const NOMBRES = {
   Politica: "Política", Economia: "Economía", Deportes: "Deportes",
@@ -12,8 +12,6 @@ export const signado = (n) => `${n >= 0 ? "+" : "−"}${num(Math.abs(n))}`;
 
 export const masProbable = (probabilidades) =>
   Object.entries(probabilidades).sort((a, b) => b[1] - a[1])[0][0];
-
-const limpiar = (s) => s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
 
 export function palabrasPorSigno(titular, tokens, cat, max = 4) {
   const limpiar = (s) => s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();

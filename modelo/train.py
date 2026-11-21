@@ -33,7 +33,7 @@ print(confusion_matrix(y_test, y_pred))
 joblib.dump(modelo, RAIZ / "modelo.joblib")
 
 cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
-scores = cross_val_score(modelo, df["Titular"], df["Categoria"], cv=cv, scoring="f1_macro")
+scores = cross_val_score(modelo, X_train, y_train, cv=cv, scoring="f1_macro")
 print("F1 macro por corte:", scores)
 print("Promedio:", scores.mean())
 print("Modelo guardado en modelo.joblib")
